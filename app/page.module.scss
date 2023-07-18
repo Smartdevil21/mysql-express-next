@@ -1,0 +1,28 @@
+.main{
+    width: 100%;
+    height: fit-content;
+    .add_task_container{
+        // padding: 2.5vh 0;
+        display: flex;
+        gap: 20px;
+        button{
+            padding: 5px 10px;
+        }input{
+            padding: 5px;
+        }
+    }
+    .task{
+        display: flex;
+        flex-direction: column;
+        padding: 20px 0;
+        gap: 5px;
+        border-bottom: 1px solid grey;
+        .btns{
+            display: flex;
+            gap: 5px;
+            .completed{
+                background-color: lightgreen;
+            }
+        }
+    }
+}

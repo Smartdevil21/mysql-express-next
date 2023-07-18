@@ -1,0 +1,14 @@
+.task{
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    gap: 5px;
+    border-bottom: 1px solid grey;
+    .btns{
+        display: flex;
+        gap: 5px;
+        .completed{
+            background-color: lightgreen;
+        }
+    }
+}

@@ -1,95 +1,53 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import { useEffect, useState } from "react";
+import styles from "./page.module.scss";
+import Task from "@/components/task/Task";
+import { getTasks, createTask } from "@/services/tasks.service";
 
 export default function Home() {
+  const [newTask, setNewTask] = useState("");
+  const [tasks, setTasks] = useState([]);
+
+  const getTaskTrigger = async () => {
+    const data = await getTasks();
+    setTasks(data.data);
+  };
+
+  useEffect(() => {
+    getTaskTrigger();
+  }, []);
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+      <h1>Todo Manager</h1>
+      <h3>A simple todo manager app created using NextJS 13 and MySQL.</h3>
+      <div className={styles.add_task_container}>
+        <input
+          type="text"
+          placeholder={"Enter your task here"}
+          value={newTask}
+          onChange={(e) => {
+            setNewTask(e.target.value);
+          }}
         />
+        <button
+          onClick={async () => {
+            await createTask(newTask);
+            await getTaskTrigger();
+            // setTasks(data.data)
+          }}
+          disabled={!newTask}
+        >
+          Add
+        </button>
       </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div className={styles.todo_container}>
+        {tasks.map((ele, index) => {
+          return (
+            <Task key={index} id={ele.id} completed={ele.completed} createdOn={ele.deadline} task_name={ele.task_name} getTaskTrigger={getTaskTrigger} />
+          );
+        })}
       </div>
     </main>
-  )
+  );
 }
